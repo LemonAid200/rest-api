@@ -6,7 +6,7 @@ createApp({
 			name: '',
 			value: '',
 			contacts: [
-				{ name: 'Boba', value: 'Biba', id: 1000, marked: false }
+				
 			]
 		}
 	},
@@ -24,12 +24,35 @@ createApp({
 			this.contacts.find(contact => contact.id === id).marked = true
 		}
 	},
-	computed(){
-		
-	},
-
-	mounted() {
+	async	mounted() {
+		console.log('Hello there')
+		this.contacts = await request('/api/contacts')
 		
 	}
 
 }).mount('#app')
+
+
+async function request(url, method = 'GET', data = null){
+	try {
+		const headers = {}
+		let body
+
+		if (data){
+			headers['Content-Type'] = 'application/json'
+			body = JSON.stringify(data)
+		}
+		console.log('responsing')
+
+		const response = await fetch(url, {
+			method,
+			headers,
+			body
+		})
+		return await response.json()
+	}
+	catch(e){
+		console.log('Ошибка')
+		console.error(e.message)
+	}
+}
