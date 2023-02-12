@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+	<title>REST API</title>
+	<style>
+		[v-cloak] {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="app">
+		<div class="mt-11 mx-4 px-20">
+			<h1 class="text-3xl font-bold mb-3">REST <span class="text-blue-600">API</span></h1>
+			<form class="flex" @submit.prevent="addContact">
+				<p class="self-center">Имя</p> <input class="mx-2" type="text" placeholder="name" v-model="name">
+				<p class="self-center">Значение</p> <input class="mx-2" type="text" placeholder="Info" v-model="value">
+				<button class="bg-blue-600 mx-2 px-2 rounded-md text-white hover:bg-blue-700" type="submit">Создать</button>
+			</form>
+
+			<div class="rounded-md border p-3 mt-3 w-1/2 min-w-fit" :style="{ background: contact.marked ? '#f0dede' : 'white'}" v-for="contact in contacts" v-cloak>
+				<h2 class="font-bold">{{ contact.name }}</h2>
+				<h3>{{ contact.value }}</h3>
+				<div class="flex mt-2">
+					<button class="bg-blue-600 mr-2 px-2 rounded-md text-white hover:bg-blue-700" @click="markContact(contact.id)" :disabled="contact.marked">Отметить</button>
+					<button class="bg-red-600 px-2 rounded-md text-white hover:bg-red-700" @click="deleteContact(contact.id)">Удалить</button>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+
+<script type="module" src="frontend.js">
+ 
+</script>
+
+</body>
+
+</html>
