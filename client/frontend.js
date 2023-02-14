@@ -13,21 +13,30 @@ createApp({
 
 	methods: {
 		addContact(){
-			if (this.name === '' || this.value === '') return
-			this.contacts.push({ name: this.name, value: this.value, id: Date.now(), marked: false })
+			if (!this.name.trim() || !this.value.trim()) return
+			const newContact = { name: this.name, value: this.value, id: Date.now(), marked: false }
+			this.contacts.push(newContact)
+			request('api/contacts', 'POST', newContact)
+
 			this.name = this.value =  ''
 		},
-		deleteContact(id){
+		async deleteContact(id){
+			const serverResponce = await request(`api/contacts/${id}`, 'DELETE')
+			console.log(serverResponce)
 			this.contacts = this.contacts.filter(contact => contact.id != id)
+
 		},
 		markContact(id){
 			this.contacts.find(contact => contact.id === id).marked = true
+			this.contacts.find(contact => console.log(contact))
+			
+
+			request(`api/contacts/${id}`, 'PATCH')
 		}
 	},
 	async	mounted() {
-		console.log('Hello there')
 		this.contacts = await request('/api/contacts')
-		
+
 	}
 
 }).mount('#app')
@@ -42,7 +51,6 @@ async function request(url, method = 'GET', data = null){
 			headers['Content-Type'] = 'application/json'
 			body = JSON.stringify(data)
 		}
-		console.log('responsing')
 
 		const response = await fetch(url, {
 			method,
